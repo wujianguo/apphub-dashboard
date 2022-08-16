@@ -19,6 +19,7 @@ jobs:
         run: |
           npm install -g @angular/cli@13.3.5
           npm install
+          echo "export const environment = {production: true, external_api_url: \'$EXTERNAL_API_URL\'};" > src/environments/environment.prod.ts
           ng build --base-href /apphub-dashboard/ --configuration production
           cp dist/apphub/index.html dist/apphub/404.html
 
