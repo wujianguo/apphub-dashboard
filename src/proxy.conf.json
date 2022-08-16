@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "https://api.apphub.libms.top",
+    "secure": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true
+  }
+}

@@ -19,7 +19,8 @@ jobs:
         run: |
           npm install -g @angular/cli@13.3.5
           npm install
-          ng build --configuration production
+          ng build --base-href /apphub-dashboard/ --configuration production
+          cp dist/apphub/index.html dist/apphub/404.html
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
