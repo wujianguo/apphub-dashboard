@@ -1,0 +1,54 @@
+<main>
+  <app-header></app-header>
+  <router-outlet></router-outlet>
+
+  <div class="my-1"></div>
+
+  <ng-container *ngIf="app$ | async as app">
+    <div class="d-flex flex-column align-items-center">
+      <div class="align-items-left">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+          <li *ngFor="let os of app.enable_os" [ngbNavItem]="os">  
+            <a (click)="clickTab()" ngbNavLink>{{os}}</a>
+            <ng-template ngbNavContent>
+              <ng-container *ngIf="packages$ | async as packages">
+                <div class="d-flex flex-column align-items-center">
+                  <div class="align-items-left">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Version</th>
+                          <th scope="col">Size</th>
+                          <th scope="col">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of packages.data" (click)="clickRow(item)">
+                          <th scope="row">{{ item.package_id }}</th>
+                          <td>{{ item.short_version }}</td>
+                          <td>{{ item.size | filesize }}</td>
+                          <td>{{ item.create_time | date:'short' }}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <ngb-pagination *ngIf="packages.total_count>pageSize" [boundaryLinks]="true" [collectionSize]="packages.total_count" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshItems()">
+                </ngb-pagination>
+                <!-- <div class="d-flex justify-content-between">
+                  <ngb-pagination *ngIf="packages.total_count>pageSize" [collectionSize]="packages.total_count" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshItems()">
+                  </ngb-pagination>
+                  <div *ngIf="packages.total_count>pageSize">count: {{packages.total_count}}</div>  
+                </div> -->
+              </ng-container>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </ng-container>
+</main>

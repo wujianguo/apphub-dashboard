@@ -1,0 +1,83 @@
+<ng-template #uploadContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Upload a package</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="file-name" class="col-form-label">File</label>
+        <input type="file" class="form-control" id="file-name">
+      </div>
+      <div class="mb-3">
+        <label for="commit-name" class="col-form-label">Commit</label>
+        <input type="text" class="form-control" id="commit-name" placeholder="Git commit id like 1c017c1a">
+      </div>
+      <div class="mb-3">
+        <label for="description-text" class="col-form-label">Description</label>
+        <textarea class="form-control" id="description-text"></textarea>
+      </div>
+    </form>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Upload</button>
+  </div>
+</ng-template>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Packages</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button type="button" (click)="shareClick()" class="btn btn-sm btn-outline-secondary">Share</button>
+      <button type="button" (click)="uploadClick(uploadContent)" class="btn btn-sm btn-outline-secondary">Upload</button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="app$ | async as app">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li *ngFor="let os of app.enable_os" [ngbNavItem]="os">  
+      <a (click)="clickTab()" ngbNavLink>{{os}}</a>
+      <ng-template ngbNavContent>
+        <ng-container *ngIf="packages$ | async as packages">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th scope="col">Package</th>
+                <th scope="col">Version</th>
+                <th scope="col">Size</th>
+                <th scope="col">Uploader</th>
+                <th scope="col">Date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of packages.data" (click)="clickRow(item)">
+                <th scope="row">{{ item.package_id }}</th>
+                <!-- <td>
+                  <img [src]="item.icon_file" class="me-2" style="width: 20px">
+                  {{ item.name }}
+                </td> -->
+                <td>{{ item.short_version }}({{ item.version}})</td>
+                <td>{{ item.size | filesize }}</td>
+                <td>{{ item.uploader.name }}</td>
+                <td>{{ item.create_time | date:'short' }}</td>
+              </tr>
+              </tbody>
+            </table>
+              
+          </div>
+      
+          <ngb-pagination *ngIf="packages.total_count>pageSize" [boundaryLinks]="true" [collectionSize]="packages.total_count" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshItems()">
+          </ngb-pagination>
+        </ng-container>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+</ng-container>
+

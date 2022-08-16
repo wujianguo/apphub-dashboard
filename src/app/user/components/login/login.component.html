@@ -1,0 +1,45 @@
+<ng-container *ngIf="config$ | async as config">
+
+  <form *ngIf="config.email.enable" class="text-center" [formGroup]="loginForm" (ngSubmit)="login()">
+    <img class="mb-4 rounded" src="assets/images/logo.png" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+    <div class="form-floating mb-3">
+      <input type="text" formControlName="account" class="form-control" id="floatingInput"
+        placeholder="Username or email" required>
+      <label for="floatingInput">Username or email</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="password" formControlName="password" class="form-control" id="floatingPassword"
+        placeholder="Password" required>
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col d-flex form-check justify-content-center">
+        <label>
+          <input class="form-check-input" type="checkbox" formControlName="rememberMe"> Remember me
+        </label>
+      </div>
+
+      <div class="col">
+        <a routerLink="/user/password/request-reset" class="text-decoration-none">Forgot password?</a>
+      </div>
+    </div>
+
+    <button [disabled]="!loginForm.valid" class="w-100 btn btn-lg btn-primary mb-4" type="submit">Sign in</button>
+
+    <div class="text-center">
+      <p>Not a member? <a routerLink="/user/register" class="text-decoration-none">Register</a></p>
+    </div>
+  </form>
+  <div *ngIf="config.email.enable" class="text-center">
+    <p *ngIf="config.social">or sign in with:</p>
+
+    <button *ngFor="let social of config.social" class="btn me-2" (click)="clickSocialLogin(social)">
+      <img src="{{ social.logo }}" width="24" height="24" class="rounded-circle">
+    </button>
+  </div>
+
+</ng-container>

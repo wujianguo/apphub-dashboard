@@ -1,0 +1,55 @@
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Releases</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button type="button" (click)="shareClick()" class="btn btn-sm btn-outline-secondary">Share</button>
+      <!-- <button type="button" (click)="uploadClick(uploadContent)" class="btn btn-sm btn-outline-secondary">Upload</button> -->
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="app$ | async as app">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li *ngFor="let os of app.enable_os" [ngbNavItem]="os">  
+      <a (click)="clickTab()" ngbNavLink>{{os}}</a>
+      <ng-template ngbNavContent>
+        <ng-container *ngIf="releases$ | async as releases">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th scope="col">Release</th>
+                <th scope="col">Version</th>
+                <th scope="col">Size</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of releases.data" (click)="clickRow(item)">
+                <th scope="row">{{ item.release_id }}</th>
+                <!-- <td>
+                  <img [src]="item.icon_file" class="me-2" style="width: 20px">
+                  {{ item.name }}
+                </td> -->
+                <td>{{ item.short_version }}({{ item.version}})</td>
+                <td>{{ item.size | filesize }}</td>
+                <td>{{ item.release_notes }}</td>
+                <td>{{ item.update_time | date:'short' }}</td>
+              </tr>
+              </tbody>
+            </table>
+              
+          </div>
+      
+          <ngb-pagination *ngIf="releases.total_count>pageSize" [boundaryLinks]="true" [collectionSize]="releases.total_count" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshItems()">
+          </ngb-pagination>
+        </ng-container>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+</ng-container>
+

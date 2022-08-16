@@ -1,0 +1,26 @@
+<app-header [links]="headerLinks"></app-header>
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column mb-2" *ngFor="let section of sidebarLinks">
+          <li class="nav-item" *ngFor="let link of section">
+            <a class="nav-link"
+                [routerLink]="link.link"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'ignored', paths: 'exact', fragment: 'ignored' }"
+                (isActiveChange)="onRouterLinkActive(link, $event)">
+              <svg [innerHTML]="safeCinema(link.icon)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi me-2" viewBox="0 0 16 16">
+              </svg>
+              {{link.title}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

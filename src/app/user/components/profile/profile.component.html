@@ -1,0 +1,6 @@
+<ng-container *ngIf="user$ | async as user">
+  <p>{{ user.username }}</p>
+  <p>{{ user.first_name }} {{ user.last_name }}</p>
+  <p>{{ user.email }}</p>
+  <img src="{{ user.avatar }}" width="50" height="50" class="rounded-circle">
+</ng-container>

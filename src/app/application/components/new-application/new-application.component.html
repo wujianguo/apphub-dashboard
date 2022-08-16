@@ -1,0 +1,46 @@
+<main>
+  <app-header></app-header>
+  <div class="app-user-content">
+    <form [formGroup]="appForm" (ngSubmit)="save()">
+      <div class="mb-3">
+        <label for="download-path" class="col-form-label">Download path</label>
+        <div class="input-group">
+          <div class="input-group-text">{{ base_url }}d/</div>
+          <input type="text" class="form-control" formControlName="slug" id="download-path">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="app-path" class="col-form-label">App path</label>
+        <div class="input-group">
+          <div class="input-group-text">{{ base_url }}</div>
+          <select class="form-select" id="inputGroupSelect01" formControlName="namespace">
+            <option *ngIf="user" selected value="user">users/{{ user.username }}/apps/</option>
+            <option *ngFor="let org of orgs" value="{{ org.path }}">orgs/{{ org.path }}/apps/</option>
+          </select>
+          <input type="text" class="form-control" formControlName="path" id="app-path">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="app-name" class="col-form-label">App name</label>
+        <input type="text" class="form-control" formControlName="name" id="app-name">
+      </div>
+      <div class="mb-3">
+        <div *ngFor="let os of os_list" class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="{{ os }}" formArrayName="os" value="{{ os }}" #checkBox (change)="onCheckboxChange(checkBox.value, checkBox)" >
+          <label class="form-check-label" for="{{ os }}">{{ os }}</label>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div *ngFor="let visibility of visibility_list" class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="visibility" formControlName="visibility" value="{{visibility.name}}">
+          <label class="form-check-label" for="{{ visibility.name}}">{{ visibility.name }}</label>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="description-text" class="col-form-label">App description</label>
+        <textarea class="form-control" formControlName="description" id="description-text"></textarea>
+      </div>
+      <button  class="w-100 btn btn-lg btn-primary mb-4" type="submit">Save</button>
+    </form>  
+  </div>
+</main>
