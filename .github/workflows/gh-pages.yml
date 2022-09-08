@@ -9,6 +9,7 @@ jobs:
   build-and-deploy:
     concurrency: ${{ github.workflow }}-${{ github.ref }}
     runs-on: ubuntu-latest
+    environment: github-pages
     permissions:
       contents: write
     steps:
@@ -19,7 +20,8 @@ jobs:
         run: |
           npm install -g @angular/cli@13.3.5
           npm install
-          echo "export const environment = {production: true, external_api_url: 'https://api.apphub.libms.top'};" > src/environments/environment.prod.ts
+          echo ${{ secrets.EXTERNAL_API_URL }}
+          echo "export const environment = {production: true, external_api_url: '${{ secrets.EXTERNAL_API_URL }}'};" > src/environments/environment.prod.ts
           ng build --base-href /${{ github.event.repository.name }}/ --configuration production
           cp dist/apphub/index.html dist/apphub/404.html
 
